@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:maxi_app5_great_places_app/models/place.dart';
 import 'package:maxi_app5_great_places_app/providers/great_places.dart';
 import 'package:maxi_app5_great_places_app/screens/add_place_screen.dart';
 import 'package:provider/provider.dart';
+import 'dart:io' as io;
 
 class PlacesListScreen extends StatelessWidget {
   @override
@@ -33,20 +37,35 @@ class PlacesListScreen extends StatelessWidget {
                     ? ch
                     : ListView.builder(
                         itemCount: greatPlaces.items.length,
-                        itemBuilder: (ctx, i) => ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: FileImage(
-                              greatPlaces.items[i].image,
-                            ),
-                          ),
-                          title: Text(greatPlaces.items[i].title),
-                          onTap: () {
-                            // Go to detail page ...
-                          },
-                        ),
+                        itemBuilder: (ctx, i) =>
+                            buildItem(greatPlaces.items[i]),
                       ),
               ),
       ),
     );
+  }
+
+  buildItem(Place place) {
+    // bool exist = await io.File(place.image.path).exists();
+    // bool exist = File(place.image.path).existsSync();
+    // if (exist) {
+    try {
+      return ListTile(
+        leading: CircleAvatar(
+          backgroundImage: FileImage(
+            place.image,
+          ),
+        ),
+        title: Text(place.title),
+        onTap: () {
+          // Go to detail page ...
+        },
+      );
+    } catch (ex) {
+      print(ex.toString());
+    }
+    // } else {
+    //   SizedBox();
+    // }
   }
 }
